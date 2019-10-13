@@ -1,0 +1,13 @@
+alias: 'reset toggle when arrive at gymnastics'
+initial_state: 'on'
+trigger:
+  platform: state
+  entity_id: sensor.joe_location
+  to: gymnastics
+condition:
+  condition: state
+  entity_id: input_boolean.becca_pick_up
+  state: 'on'
+action:
+  service: input_boolean.turn_off
+  entity_id: input_boolean.becca_pick_up

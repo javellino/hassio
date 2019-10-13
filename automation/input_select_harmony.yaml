@@ -1,0 +1,26 @@
+alias: 'change Harmony Activty based on input'
+initial_state: 'on'
+trigger:
+  platform: state
+  entity_id: input_select.family_room_select
+action:
+  service: remote.turn_on
+  data_template:
+    entity_id: remote.family_room
+    activity: >
+      {% if is_state("input_select.family_room_select", "Power Off") %}
+              -1
+      {% elif is_state("input_select.family_room_select", "Watch Cable") %}
+              23532324
+      {% elif is_state("input_select.family_room_select", "Netflix") %}
+              23532325
+      {% elif is_state("input_select.family_room_select", "Play Wii U") %}
+              23555859
+      {% elif is_state("input_select.family_room_select", "Amazon") %}
+              23532328      
+      {% elif is_state("input_select.family_room_select", "Play DVD") %}
+              23532327
+      {% elif is_state("input_select.family_room_select", "Plex") %}
+              23532330
+      {% endif %}
+

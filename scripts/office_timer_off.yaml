@@ -1,0 +1,5 @@
+alias: 'wait 5 mins and turn off lights'
+sequence: 
+  - delay: '00:05:00'
+  - service: light.turn_off
+    entity_id: light.aoffice

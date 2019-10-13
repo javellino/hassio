@@ -1,0 +1,17 @@
+ring_motion:
+  name: ring motion
+#  initial: 'off'
+
+xmas_mode:
+  name: Christmas mode
+#  initial: 'off'
+
+vacation_mode:
+  name: Vacation Mode
+#  initial: 'off'
+
+becca_pick_up:
+#  initial: 'off'
+
+mbr_window_triggered:
+  

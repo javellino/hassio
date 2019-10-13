@@ -1,0 +1,17 @@
+alias: 'Joe to work'
+initial_state: 'on'
+trigger:
+  platform: time
+  at: '04:30:00'
+condition:
+  condition: state
+  entity_id: calendar.joes_work_calendar
+  state: 'on'
+action:
+  - service: light.turn_on
+    entity_id: light.office
+  - service: light.turn_on
+    entity_id: group.outside_lights
+  - service: notify.ios_joesiphone7
+    data_template:
+      message: 'Forecast today: {{states.sensor.dark_sky_hourly_summary.state}}. Currently {{states.sensor.dark_sky_apparent_temperature.state|round|int}} degrees and {{ states.sensor.dark_sky_humidity.state|round|int}}% humidity. Pollen count is {{states.sensor.allergy_index_today.attributes.rating}}.'

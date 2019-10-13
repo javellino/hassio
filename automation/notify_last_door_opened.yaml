@@ -1,0 +1,12 @@
+alias: 'Notify that front door unlocked'
+initial_state: 'on'
+trigger:
+  platform: state
+  entity_id: sensor.last_front_door_timestamp
+action:
+  - service: notify.pb
+    data_template:
+      message: "{{ states.sensor.last_front_door_code.state }} has unlocked the front door."
+  - service: ifttt.trigger
+    data_template: { "event":"Front_door_unlocked", "value1":"{{states.sensor.last_front_door_code.state}}", "value2":"{{now().strftime('%Y-%m-%d') }}", "value3":"{{now().strftime('%H:%M') }}"  }
+

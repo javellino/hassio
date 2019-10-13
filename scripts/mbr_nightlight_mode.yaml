@@ -1,0 +1,10 @@
+alias: pre-sleep mode
+sequence:
+  - service: light.turn_on
+    entity_id: light.jens_lamp_118, light.joes_lamp_119
+    data:
+      brightness: 255
+  - service: light.turn_off
+    entity_id: light.mbr_lights_109
+  - service: switch.turn_on
+    entity_id: switch.mbr_fan_108

@@ -1,0 +1,730 @@
+resources:
+  - url: /local/mini-media-player-bundle.js?v=0.9.5
+    type: module
+#  - url: /local/mini-graph-card-bundle.js?v=0.0.8
+#    type: js
+  - url: /local/bignumber-card.js
+    type: js
+  - url: /local/group-card.js
+    type: js
+  - url: /local/monster-card.js
+    type: js
+  - url: /local/tracker-card.js?v=0.3.2
+    type: js
+  - url: /local/vertical-style-card.js?v=0.1
+    type: js
+  - type: module
+    url: >-
+      https://cdn.jsdelivr.net/gh/custom-cards/spotify-card/dist/spotify-card.umd.js
+  - url: /community_plugin/surveillance-card/surveillance-card.js
+    type: module
+  - url: /community_plugin/config-template-card/config-template-card.js
+    type: module
+  - url: /community_plugin/mini-graph-card/mini-graph-card.js
+    type: module
+  - url: /community_plugin/dual-gauge-card/dual-gauge-card.js
+    type: js
+    
+    
+
+
+
+title: FredVegas
+views:
+    # View tab title.
+  - title: home
+    id: 0
+    cards:
+      - type: weather-forecast
+        entity: weather.dark_sky
+      - type: iframe
+        url: https://embed.windy.com/embed2.html?lat=38.373&lon=-77.401&zoom=9&level=surface&overlay=wind&menu=&message=true&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=38.300&detailLon=-77.477&metricWind=mph&metricTemp=%C2%B0F&radarRange=-1
+        aspect_ratio: 100%
+      - type: vertical-stack
+        cards:
+          - type: custom:vertical-style-card
+            title: Family
+            cards: 
+            - type: horizontal-stack
+              cards:
+                - type: picture-entity
+                  image: /local/abby.jpeg
+                  entity: sensor.abby_location
+                  show_name: false
+                  name: Abby
+                - type: picture-entity
+                  image: /local/becca.jpeg
+                  entity: sensor.becca_location
+                  name: Becca
+                  show_name: false
+                - type: picture-entity
+                  entity: sensor.joe_location
+                  name: Joe
+                  show_name: false
+                  image: /local/joe2.jpeg
+                - type: picture-entity
+                  entity: device_tracker.jens_iphone_xs_2
+                  image: /local/jen.jpeg
+                  name: Jen
+                  show_name: false
+#          - type: entity-filter
+#            entities:
+#              - entity: sensor.joe_location
+#                name: Joe
+#              - entity: device_tracker.jens_iphone_xs
+#                name: Jen
+#              - entity: sensor.abby_location
+#                name: Abby
+#              - entity: sensor.becca_location
+#                name: Becca
+#            state_filter:
+#              - "home"
+#            card:
+#              type: glance
+#              title: Who's home?
+#              show_state: false
+ #         - type: map
+ #           entities:
+ #             - zone.home
+ #             - device_tracker.joe_joesiphone6s
+ #             - device_tracker.abby_abbysiphone
+ #             - device_tracker.becca_beccasiphone
+      - type: entity-filter
+        entities: 
+          - binary_sensor.front_door_sensor
+          - binary_sensor.garage_door_door_sensor
+          - binary_sensor.back_door_slider_sensor
+          - binary_sensor.basement_slider_sensor
+          - binary_sensor.garage_position 
+        state_filter:
+          - "on"
+        card:
+          type: glance
+          title: Doors Open
+          show_state: false
+          show_empty: false
+      - type: entity-filter
+        entities:
+          - entity: binary_sensor.office_motion_161
+            name: Office
+          - entity: binary_sensor.upstairs_motion_124
+            name: Office
+          - entity: binary_sensor.basement_motion_1_216
+            name: "Basement 1"
+          - entity: binary_sensor.dafang_motion_sensor
+            name: "Basement 2"
+          - entity: binary_sensor.front_hall_motion
+            name: Front Hall
+          - entity: binary_sensor.ring_front_door_motion
+            name: Front Door
+        state_filter:
+          - "on"
+        card:
+          type: glance
+          title: Motion detected
+          show_state: false
+      - type: custom:monster-card
+        show_empty: false
+        card: 
+          type: glance
+          title: "Low Battery"
+          show_state: false
+        filter:
+          include:
+            - domain: binary_sensor
+              attributes:
+                battery_level: '< 30'
+            - domain: lock
+              attributes:
+                battery_level: '< 30'
+            - domain: device_tracker
+              attributes:
+                battery: '< 30'
+
+#      - type: custom:mini-graph-card
+#        entities:
+#          - sensor.joes_bg_value
+#        icon: mdi:arrow-right-thick
+      - type: custom:config-template-card
+        variables:
+          - states['sensor.joes_bg_direction'].state
+          - states['sensor.joes_bg_value'].state
+        entities:
+          - sensor.joes_bg_direction
+        card:
+          type: 'custom:mini-graph-card'
+          name: "Joe's Dexcom"
+          hours_to_show: 12
+          points_per_hour: 2
+          line_color:  "${ vars[1] >= 170 ? '#ffff00' : vars[1] <= 80 ? '#ff0000' : '#00ff00' }"
+          entities:
+            - sensor.joes_bg_value
+          icon: >-
+                  "${ switch(vars[0]) {
+                      case '1': 
+                        'mdi:arrow-collapse-up'
+                        break;
+                      case '2':
+                        'mdi:arrow-top-right-thick'
+                        break;
+                      case '3':
+                        'mdi:arrow-top-right'
+                        break;
+                      case '4': 
+                        'mdi:arrow-right' 
+                         break;
+                      case '5':
+                        'mdi:arrow-bottom-right'
+                        break;
+                      case '6':
+                        'mdi:arrow-bottom-right-thick'
+                        break;
+                      case '7':
+                        'mdi:arrow-collapse-down'
+                        break;
+                      case '8': 
+                        'mdi:help'
+                        break;
+                      default:
+                        'mdi:help'
+                     }
+                        
+                   }"
+        
+          
+            
+#      - type: sensor
+#        entity: sensor.joes_bg_value
+##        name: Joe's Sugar
+#        graph: line
+#        hours: 3
+#        icon: mdi:chart-line-variant
+      - type: vertical-stack
+        aspect_ratio: 75%
+        cards:
+          - type: entities
+            title: Modes
+            show_header_toggle: false
+            entities:
+              - input_boolean.xmas_mode
+              - input_boolean.vacation_mode
+          - type: conditional
+            conditions:
+              - entity: input_boolean.xmas_mode
+                state: "on"
+            card:             
+              type: custom:group-card
+              card:
+                type: entities
+                title: Christmas Lights
+              group: group.xmas_switches
+      - type: custom:vertical-style-card
+        title: Cameras
+        cards:
+          - type: picture-glance
+            camera_image: camera.family_room_dog
+            title: Kennel
+            entities:
+              - binary_sensor.family_room_camera_dog_motion_detected
+              - binary_sensor.family_room_camera_dog_online
+          - type: picture-glance
+            camera_image: camera.entryway
+            title: Entry Way
+            entities: []
+          - type: picture-glance
+            camera_image: camera.deck
+            title: Back Deck
+            entities:
+              -  binary_sensor.deck_camera_motion_detected
+              -  light.deck_light_228
+          
+
+          - type: picture-glance
+            title: Basement
+            camera_image: camera.puppy_cam
+            entities:
+              - binary_sensor.basement_motion_1_216
+              - binary_sensor.dafang_motion_sensor
+              - light.far_lights_234
+              - light.stair_lights_232
+          - type: picture-glance
+            entities:
+              - binary_sensor.ring_front_door_motion
+              - binary_sensor.ring_front_door_ding
+              - lock.front_door_lock_4
+            tap_action: 
+              action: call-service
+              service: lock.lock
+              service_data:
+                entity_id: lock.front_door_lock_4
+            hold_action: 
+              action: call-service
+              service: lock.unlock
+              service_data:
+                entity_id: lock.front_door_lock_4
+            camera_image: camera.front_door
+            title: Front Door
+            
+
+        
+                
+        
+          
+         
+          
+#      - type: thermostat
+#        entity: climate.kit
+#      - type: thermostat
+#        entity: climate.upstairs
+#      - type: thermostat
+#        entity: climate.bsmt    
+#      - type: iframe
+#        url: https://javellino-dexcom-nightscout.herokuapp.com
+
+
+
+  - title: Master Bedroom
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                entity: script.mbr_sleep_mode
+                name: sleep
+                tap_action: 
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.mbr_sleep_mode
+              - type: entity-button
+                entity: script.mbr_nightlight_mode
+                name: presleep
+                tap_action: 
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.mbr_nightlight_mode
+              - type: entity-button
+                entity:  script.mbr_awake_in_bed
+                name: awake
+                icon: mdi:eye-outline
+                tap_action: 
+                  action: call-service
+                  service: script.turn_on
+                  service_data: 
+                    entity_id: script.mbr_awake_in_bed
+
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                name: fan
+                icon: mdi:fan
+                entity: switch.mbr_fan_108
+                tap_action: 
+                  action: toggle
+              - type: entity-button
+                name: ceiling light
+                entity:  light.mbr_lights_109
+                tap_action: 
+                  action: toggle
+                icon: mdi:ceiling-light
+          - type: horizontal-stack
+            cards:
+              - type: light
+                entity: light.jens_lamp_118
+              - type: light
+                entity: light.joes_lamp_119
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                name: portable AC
+                tap_action: 
+                  action: toggle
+                icon: mdi:air-conditioner
+                entity: switch.portable_ac_toggle
+              - type: entity-button 
+                name: jens blanket
+                tap_action: 
+                  action: toggle
+                entity: switch.wemo_switch_bravo
+          - type: thermostat
+            entity: climate.master_bedroom_master_bedroom
+          - type: custom:mini-media-player
+            artwork: cover
+            entity: media_player.master_bedroom_speaker
+          - type: custom:mini-media-player
+            artwork: cover
+            entity: media_player.bedroom
+#          - type: entity-filter
+#            show_empty: false
+#            entities:
+#              - media_player.master_bedroom_speaker
+#              - media_player.bedroom
+#            state_filter:
+#              - "off"
+ #           card:
+ #             - type: media-control
+ #               entity:
+ #                 - media_player.master_bedroom_speaker
+              
+  - title: Downstairs
+    cards:
+
+      - type: custom:vertical-style-card
+        title: Kitchen
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: entity-button
+                entity: light.table_light_229
+                title: table light
+                tap_action: 
+                  action: toggle
+                icon: mdi:ceiling-light
+              - type: thermostat
+                entity:  climate.kitchen_kitchen
+                title: Kitchen AC
+              - type: custom:mini-media-player
+                entity: media_player.kitchen_display
+                artwork: cover
+
+      - type: custom:vertical-style-card
+        title: Family Room
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: picture-glance
+                camera_image: camera.family_room_dog
+                title: Kennel
+                entities:
+                  - binary_sensor.family_room_camera_dog_motion_detected
+                  - binary_sensor.family_room_camera_dog_online
+              - type: horizontal-stack
+                cards:
+                  - type: entity-button
+                    entity: light.fireplace_lights_220
+                    title: fireplace 
+                    icon: mdi:ceiling-light
+                    tap_action: 
+                      action: toggle
+                  - type: entity-button
+                    entity: switch.family_room_fan_213
+                    title: fan
+                    icon: mdi:fan
+                    tap_action: 
+                      action: toggle
+
+              - type: horizontal-stack
+                cards: 
+                - type: light
+                  entity: light.joe_family_room_lamp
+                  name: Joes lamp
+                - type: light
+                  entity: light.jen_family_room_lamp
+                  name: Jens lamp
+              - type: vertical-stack
+                cards:
+                  - type: custom:mini-media-player
+                    entity: media_player.family_room
+                    title: Roku
+                    artwork: cover
+                  - type: custom:mini-media-player
+                    entity: media_player.fluffy
+                    title: Fluffy
+                    artwork: cover
+                  - type: custom:mini-media-player
+                    entity: media_player.kitchen_speaker
+                    title: google
+                    
+                
+      - type: custom:vertical-style-card
+        title: Living Room
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: light
+                entity: light.livingroomlamp1
+                name: Couch Lamp R
+              - type: light
+                entity: light.livingroomlamp2
+                name: Couch Lamp L
+      - type: custom:vertical-style-card
+        title: Dining Room
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                entity: switch.bookshelf
+                name: Bookshelf
+                icon: mdi:power-socket-us
+              - type: entity-button
+                entity: switch.chinacabinet
+                name: China Cabinet
+                icon: mdi:power-socket-us
+                  
+                  
+                  
+                
+                
+
+        
+        
+        
+  - title: Basement
+    cards:
+      - type: picture-glance
+        title: Basement
+        camera_image: camera.puppy_cam
+        entities:
+          - binary_sensor.basement_motion_1_216
+          - binary_sensor.dafang_motion_sensor
+          - light.far_lights_234
+          - light.stair_lights_232
+      - type: thermostat
+        entity: climate.basement_basement 
+      - type: custom:mini-media-player
+        artwork: cover
+        entity: media_player.apple_tv
+        
+        
+ 
+#  - title: Dining Room
+#    cards:
+#      - type: entity-button
+#        entity: 
+#      - type: light
+#        entity: light.joes_lamp_119
+
+
+
+  - title: Office
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: custom:bignumber-card
+                entity: sensor.temperature_sensor_1_181
+                title: Temperature
+                from: left
+                min: 0
+                max: 100
+                severity:
+                  - value: 70
+                    style: 'var(--label-badge-green)'
+                  - value: 75
+                    style: 'var(--label-badge-yellow)'
+                  - value: 80
+                    style: 'var(--label-badge-red)'
+              - type: custom:bignumber-card
+                entity: sensor.humidity_sensor_1_183
+                title: Humidity
+                from: left
+                min: 0
+                max: 100
+                severity:
+                  - value: 70
+                    style: 'var(--label-badge-green)'
+                  - value: 75
+                    style: 'var(--label-badge-yellow)'
+                  - value: 80
+                    style: 'var(--label-badge-red)'
+              - type: entity-button
+                name: Fan
+                tap_action: 
+                  action: toggle
+                icon: mdi:fan
+                entity: switch.wemo_switch_charlie
+          - type: custom:group-card
+            card:
+              type: entities
+              title: Lights
+            group:  group.office_lights
+            entity: 
+          - type: custom:mini-media-player
+            artwork: cover
+            entity: media_player.office_speaker
+        
+        
+  - title: Outside
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: entity-filter
+            entities: 
+              - binary_sensor.front_door_sensor
+              - binary_sensor.garage_door_door_sensor
+              - binary_sensor.back_door_slider_sensor
+              - binary_sensor.basement_slider_sensor
+              - binary_sensor.garage_position 
+            state_filter:
+              - "on"
+            card:
+              type: glance
+              title: Doors Open
+            show_state: false
+            show_empty: false
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                name: Driveway
+                icon: mdi:car-side
+                entity: light.driveway_lights_65
+                tap_action: 
+                  action: toggle
+              - type: entity-button
+                name: Front Porch
+                icon: mdi:door
+                entity: light.front_porch_lights_63
+                tap_action: 
+                  action: toggle
+              - type: entity-button
+                name: Back Deck
+                icon: mdi:ceiling-light
+                entity: light.deck_light_228
+                tap_action: 
+                  action: toggle   
+
+          - type: picture-glance
+            entities:
+              - binary_sensor.ring_front_door_motion
+              - binary_sensor.ring_front_door_ding
+              - lock.front_door_lock_4
+            tap_action: 
+              action: call-service
+              service: lock.lock
+              service_data:
+                entity_id: lock.front_door_lock_4
+            hold_action: 
+              action: call-service
+              service: lock.unlock
+              service_data:
+                entity_id: lock.front_door_lock_4
+            camera_image: camera.front_door
+            title: Front Door
+
+            show_state: false
+          - type: entity-button
+            entity: switch.garage_door_99
+            title: Garage door
+            icon: mdi:garage
+            tap_action:
+              action: toggle
+          - type: picture-glance
+            camera_image: camera.deck
+            title: Back Deck
+            entities:
+              -  binary_sensor.deck_camera_motion_detected
+              -  light.deck_light_228
+
+            show_state: false
+            
+  - title: Network
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: gauge
+                entity: sensor.disk_use_percent_home
+                name: Hassio Disk Space
+              - type: gauge
+                entity: sensor.processor_use
+                name: Hassio CPU
+          - type: horizontal-stack
+            cards:
+              - type: custom:dual-gauge-card
+                title: Pi-hole
+                outer: 
+                  entity: sensor.pi_hole_ads_percentage_blocked_today
+                  min: 0
+                  max: 50
+                  unit: "%"
+                  label: blocked
+                inner: 
+                  entity: sensor.pi_hole_dns_unique_clients
+                  min: 0
+                  max: 100
+                  label: clients
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                entity:  binary_sensor.backups
+              - type: entity-button
+                entity: binary_sensor.hassbackups
+                  
+
+#              - type: gauge
+#                entity: sensor.raspberrypi_disk_space
+#                name: Rpi Disk Space  
+#              - type: gauge
+#                entity: sensor.data_space
+#                name: Data Storage
+##          - type: horizontal-stack
+#            cards:
+#              - type: gauge
+#                entity: sensor.cpu
+#                name: Hassbian CPU
+#              - type: gauge
+#                entity: sensor.gonzo_cpu
+#                name: Gonzo CPU
+#              - type: gauge
+#                entity: sensor.raspberrypi_cpu
+#                name: Rpi CPU
+
+          - type: custom:mini-media-player
+            artwork: cover
+            entity: media_player.spotify
+          - type: custom:spotify-card
+            client_id: !secret spotify_client_id2
+            
+
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                name: pihole
+                entity:  switch.pihole
+
+              - type: gauge 
+                name:  NzbGet Speed
+                entity: sensor.nzbget_speed
+              - type: gauge
+                name: Transmission speed
+                entity: sensor.transmission_down_speed
+
+#              - type: entity-button
+#                name: transmission
+#                entity: binary_sensor.transmission_status
+#                tap_action: 
+#                  action: call-service
+#                  service: shell_command.restart_transmission
+#              - type: entity-button
+#                name: pihole
+#                icon: mdi:network-off-outline
+#                entity: switch.pihole_switch
+#                tap_action: 
+#                  action: toggle
+
+
+
+
+
+  - title: Surveillance
+    icon: mdi:cctv
+    panel: true
+    cards:
+      - type: custom:surveillance-card
+        thumb_interval: 15
+        update_interval: 2
+        cameras:
+          - entity: camera.deck
+            motion_entity: binary_sensor.deck_camera_motion_detected
+          - entity: camera.entryway
+            motion_entity: binary_sensor.entryway_camera_motion_detected
+          - entity: camera.family_room_dog
+            motion_entity:  binary_sensor.family_room_camera_dog_motion_detected
+          - entity:  camera.front_door
+            motion_entity: binary_sensor.ring_front_door_motion
+          - entity:  camera.puppy_cam
+            motion_entity: binary_sensor.dafang_motion_sensor

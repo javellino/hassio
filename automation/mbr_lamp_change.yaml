@@ -1,0 +1,18 @@
+alias: change lamp brightness with slider
+initial_state: 'on'
+trigger:
+  - platform: state
+    entity_id: input_number.mbr_lamp_jen
+  - platform: state
+    entity_id: input_number.mbr_lamp_joe
+  - platform: state
+    entity_id: input_number.mbr_group_lamps
+action:
+  service: light.turn_on
+  data_template: 
+    entity_id: >
+       {% if trigger.entity_id == "input_number.mbr_lamp_jen" %} light.jens_lamp_118
+       {% elif trigger.entity_id == "input_number.mbr_lamp_joe" %} light.joes_lamp_119
+         {% else %}  group.mbr_both_lamps {% endif %}
+
+    brightness: '{{ trigger.to_state.state | int }}'

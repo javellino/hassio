@@ -1,0 +1,13 @@
+alias: set front motion sensor
+initial_state: 'on'
+trigger:
+  - platform: state
+    entity_id: input_boolean.ring_motion
+    to: 'on'
+action:
+  - service: script.turn_off
+    data:
+      entity_id: script.reset_ring_motion
+  - service: script.turn_on
+    data:
+      entity_id: script.reset_ring_motion

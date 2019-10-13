@@ -1,0 +1,12 @@
+alias: 'sync garage input select with switch'
+trigger:
+  platform: state
+  entity_id: swtich.garage_door_99
+action:
+  service: input_select.select_option
+  data:
+    entity_id: input_select.garage_door
+  data_template:
+    option: >
+      {% if is_state('switch.garage_door_99', 'on') %} open
+      {% else %} closed {% endif %}

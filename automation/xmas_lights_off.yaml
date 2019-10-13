@@ -1,0 +1,24 @@
+alias: 'turn off chrismas lights at 10pm when xmas_mode active'
+initial_state: 'on'
+trigger:
+  platform: time
+  at: '23:00:00'
+condition:
+  condition: state
+  entity_id: input_boolean.xmas_mode
+  state: 'on'
+action:
+  service: switch.turn_off
+  entity_id: group.xmas_switches 
+
+
+
+#  - service: light.turn_off
+#    entity_id:
+#      - group.outside_lights
+#  - service: switch.turn_off
+#    entity_id: switch.garage_door_99
+#  - service: lock.lock
+#    entity_id: lock.front_door_lock_4
+#  - service_template: " {% if is_state('input_boolean.xmas_mode', 'on') or is_state('states.switch.outside_xmas_lights_116.state', 'off') %} light.turn_off {% else %} light.turn_on {% endif %} "
+#    entity_id: switch.outside_xmas_lights_116  

@@ -1,0 +1,21 @@
+alias: 'outside lights on at sunset'
+initial_state: 'on'
+trigger:
+  platform: sun
+  event: sunset
+  offset: '-00:30:00'
+action:
+  - service: light.turn_on
+    entity_id:
+      - light.front_porch_lights_63
+      - light.driveway_lights_65
+      - light.deck_light_228
+      - light.livingroomlamp1
+      - light.livingroomlamp2
+  - service: switch.turn_on
+    entity_id: 
+      - switch.bookshelf
+      - switch.chinacabinet
+
+#  - service_template: " {% if is_state('input_boolean.xmas_mode', 'on') or is_state('states.switch.outside_xmas_lights_116.state', 'on') %} light.turn_on {% else %} light.turn_off {% endif %}"
+#    entity_id: switch.outside_xmas_lights_116

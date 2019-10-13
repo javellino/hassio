@@ -1,0 +1,64 @@
+script:
+  reset_motion_boolean:
+    alias: "reset motion boolean"
+    sequence: 
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.front_hall_motion
+      - delay: 00:05:00
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.front_hall_motion
+
+binary_sensor:
+  - platform: template
+    sensors:
+      front_hall_motion:
+        friendly_name: Front Hall Motion
+        value_template: "{{ is_state('input_boolean.front_hall_motion', 'on')}}"
+        device_class: motion
+        
+      
+input_boolean:
+  front_hall_motion:
+
+    
+automation:
+  - alias: "reset front hall motion boolean"
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: binary_sensor.front_hall_motion_raw
+      to: 'on'
+    action:
+      - service: script.turn_off
+        entity_id: script.reset_motion_boolean
+      - service: script.turn_on
+        entity_id: script.reset_motion_boolean
+    
+  - alias: 'detect hall motion'
+    initial_state: 'on'
+    trigger: 
+      platform: state
+      entity_id: binary_sensor.front_hall_motion_raw
+      to: 'on'
+    condition: 
+      condition: state
+      entity_id: sun.sun
+      state: below_horizon
+  
+    action: 
+      service: light.turn_on
+      data_template:
+        entity_id: light.hallway_lamp
+        brightness: '{% set current_hour = now().strftime("%H") | int %} {%- if current_hour
+               <= 6 %} 64 {% elif current_hour < 20 %} 255 {% else %} 128 {% endif %}'
+  - alias: 'stop detecting motion turn off lamp after 5 mins'
+    initial_state: 'on'
+    trigger: 
+      platform: state
+      entity_id: binary_sensor.front_hall_motion_raw
+      to: 'off'
+      for:
+        minutes: 5
+    action:
+      service: light.turn_off
+      entity_id: light.hallway_lamp

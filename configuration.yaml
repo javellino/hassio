@@ -1,0 +1,292 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret home_elevation
+  # metric for Metric, imperial for Imperial
+  unit_system: imperial
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: America/New_York
+  # Customization file
+  customize: !include customize.yaml
+
+  packages: !include_dir_named packages
+
+hassio:
+
+# Show links to resources in log and frontend
+#introduction:
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  # Secrets are defined in the file secrets.yaml
+  api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  base_url: !secret base_url
+  use_x_forwarded_for: true
+  trusted_proxies: 
+    - 172.30.0.0/16 
+
+
+logger:
+  default: critical
+  logs:
+    homeassistant.components.http.ban: warning
+    homeassistant.components.device_tracker: warning
+
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+# Text to speech
+tts:
+  - platform: google_translate
+    service_name: google_say
+
+# Cloud
+cloud:
+
+lovelace:
+  mode: yaml
+
+ffmpeg:
+
+ring:
+  username: !secret ring_username
+  password: !secret ring_password
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+
+automation old: !include_dir_list automation
+
+input_boolean: !include input_booleans.yaml
+
+input_number: !include input_sliders.yaml
+
+input_select: !include input_selects.yaml
+
+binary_sensor: !include binary_sensors.yaml
+
+sensor: !include sensors.yaml
+
+zone: !include zones.yaml
+
+switch:
+  - platform: command_line
+    switches:
+      deus_ex:
+        command_on: curl "http://10.9.209.25:3480/data_request?id=action&output_format=xml&DeviceNum=129&serviceId=urn:upnp-org:serviceId:SwitchPower1&action=SetTarget&newTargetValue=1"
+        command_off: curl "http://10.9.209.25:3480/data_request?id=action&output_format=xml&DeviceNum=129&serviceId=urn:upnp-org:serviceId:SwitchPower1&action=SetTarget&newTargetValue=0"
+        friendly_name: Deus Ex
+      pihole:
+        command_on: "curl -X GET 'http://10.9.209.182:4865/admin/api.php?enable&auth=6d17553c30d5d422a00e7078e1f6e2c6624bd4118765fd842c6b3c5d8a8d4746' && curl -X GET 'http://10.9.209.11:8017/admin/api.php?enable&auth=cb461ce232e2c2f4711901baf2ef5d3228b1eb3fae97ecfcdfea692187ae59ef'"
+        command_off: "curl -X GET 'http://10.9.209.182:4865/admin/api.php?disable=3600&auth=6d17553c30d5d422a00e7078e1f6e2c6624bd4118765fd842c6b3c5d8a8d4746' && curl -X GET 'http://10.9.209.11:8017/admin/api.php?disable=3600&auth=cb461ce232e2c2f4711901baf2ef5d3228b1eb3fae97ecfcdfea692187ae59ef'"
+        command_state: "curl -X GET 'http://10.9.209.182:4865/admin/api.php?status'"
+        value_template: "{{ value_json.status == 'enabled' }}"
+  - platform: flux
+    lights:
+      - light.jen_family_room_lamp
+      - light.joe_family_room_lamp
+      - light.desk_light
+      - light.mood_lighting
+      - light.office_light_4
+      - light.office_post_light
+    
+        
+tplink:
+  switch:
+    - host: 10.9.209.105
+
+
+shell_command:
+  start_deus_ex: curl "http://10.9.209.25:3480/data_request?id=action&output_format=xml&DeviceNum=129&serviceId=urn:upnp-org:serviceId:SwitchPower1&action=SetTarget&newTargetValue=1"
+  stop_deus_ex: curl "http://10.9.209.25:3480/data_request?id=action&output_format=xml&DeviceNum=129&serviceId=urn:upnp-org:serviceId:SwitchPower1&action=SetTarget&newTargetValue=0"
+ 
+#custom_updater:
+#  track:
+#    - cards
+#    - components
+#  card_urls: 
+#    - https://raw.githubusercontent.com/matisaul/vertical-style-card/master/tracker.json
+
+transmission:
+  host: !secret transmission_host
+
+  monitored_conditions:
+    - current_status
+    - download_speed
+    - upload_speed
+    - total_torrents
+
+panel_iframe:
+  bg:
+    title: "Joes CGM"
+    url: !secret cgm_url
+    icon: mdi:chart-line
+
+
+mqtt:
+  broker: localhost
+  port: 1883
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  discovery: true
+  discovery_prefix: homeassistant
+
+device_tracker:
+
+  - platform: unifi
+    host: !secret unifi_host_internal
+    verify_ssl: false
+    port: 8443
+    site_id: !secret unifi_site_id
+    username: !secret unifi_username
+    password: !secret unifi_password
+    new_device_defaults:
+      track_new_devices: true
+    detection_time: 60
+    interval_seconds: 25
+    consider_home: 60
+
+  - platform: tile
+    username: !secret tile_username
+    password: !secret tile_password
+    monitored_variables:
+      - TILE
+      - PHONE
+
+system_health:
+
+owntracks:
+  max_gps_accuracy: 200
+
+camera:
+  - platform: mjpeg
+    mjpeg_url: http://10.9.209.11:8081
+    name: Puppy Cam
+
+
+camera 7:
+  - platform: ring
+
+
+media_player:
+#  - platform: mpd
+#    host: 10.9.209.130
+  - platform: spotify
+    client_id: !secret spotify_client_id
+    client_secret: !secret spotify_client_secret
+ 
+ 
+#spotcast:
+#  username: !secret spotify_username
+#  password: !secret spotify_password
+
+
+recorder:
+  db_url: !secret database_url
+  purge_keep_days: 20
+  
+
+#ifttt API
+ifttt:
+  key: !secret ifttt_key
+
+weather:
+  - platform: darksky
+    api_key: !secret darksky_api_key
+
+nest:
+  client_id: !secret nest_client_id
+  client_secret: !secret nest_secret
+
+google:
+  client_id: !secret google_client_id
+  client_secret: !secret google_client_secret
+
+notify:
+  - name: pb
+    platform: pushover
+    api_key: !secret pushover_api_key
+    user_key: !secret pushover_user_key 
+
+
+# Vera Platform
+vera:
+  vera_controller_url: !secret vera_controller_url
+  exclude: [ 85, 81, 87, 71, 73, 69, 79, 75, 77, 83, 185, 107, 27, 28, 29, 30, 187, 188, 189, 190, 191, 192, 193, 226 ] 
+  lights: [ 118, 119, 130, 65, 63, 109, 220, 228, 229, 232, 234]
+
+light:
+    - platform: group
+      name: Living Room Lights
+      entities:
+        - light.livingroomlamp1
+        - light.livingroomlamp2
+
+wemo:
+
+
+tuya: 
+  username: !secret tuya_username
+  password: !secret tuya_password
+  country_code: 1
+  
+sleepiq:
+  username: !secret sleepiq_username
+  password: !secret sleepiq_password
+  
+hacs:
+  token: !secret hacs_token
+
+
+pi_hole:
+  host: 'localhost:4865'
+  ssl: false
+  verify_ssl: false
+
+#ios:
+#  push:
+#    categories:
+#      - name: Lockup
+#        identifier: 'lockup'
+#        actions:
+#          - identifier: 'YESLOCKUP'
+#            title: 'Lockup House'
+#          - identifier: 'NOLOCKUP'
+#            title: 'do nothing. You good'
+            

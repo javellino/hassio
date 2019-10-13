@@ -1,0 +1,21 @@
+alias: 'update sliders if individual lights change'
+initial_state: 'on'
+trigger: 
+  - platform: state
+    entity_id: light.jens_lamp_118
+  - platform: state
+    entity_id: light.joes_lamp_119
+action:
+  service: input_number.set_value
+  data_template:
+    entity_id: >
+        {% if trigger.entity_id == "light.jens_lamp_118" %} input_number.mbr_lamp_jen
+        {% elif trigger.entity_id == "light.joes_lamp_119" %} input_number.mbr_lamp_joe
+        {% else %} input_number.mbr_group_lamps {% endif %}  
+    value: >
+      {% if trigger.to_state.attributes.brightness %} 
+         {{ trigger.to_state.attributes.brightness|float }}
+      {% else %}
+         0
+      {% endif %}
+

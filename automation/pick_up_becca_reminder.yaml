@@ -1,0 +1,24 @@
+alias: 'reminder to pick up becca at gymnastics'
+initial_state: 'on'
+trigger:
+  platform: time
+  at: '19:15:00'
+condition:
+  condition: and
+  conditions:
+    - condition: state
+      entity_id: input_boolean.becca_pick_up
+      state: 'on'
+    - condition: state
+      entity_id: sensor.joe_location
+      state: 'home'
+action:
+  - service: notify.ios_joesiphone7
+    data_template:
+      message: "its now {{states.sensor.time.state}}, you should have left to get Becca!"
+  - service: light.turn_on
+    data:
+      entity_id: light.joe_family_room_lamp
+      flash: long
+
+

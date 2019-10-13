@@ -1,0 +1,10 @@
+alias: Lock up house
+sequence:
+  - service: lock.lock
+    entity_id: lock.front_door_lock_4
+  - service: switch.turn_off
+    entity_id: switch.garage_door_99
+
+#for future use
+#  - service: 
+#    entity_id: 

@@ -1,0 +1,9 @@
+alias: 'turn furnace room light on'
+initial_state: 'on'
+trigger:
+  platform: state
+  entity_id: binary_sensor.furnace_room_235
+  to: 'on'
+action:
+  service: light.turn_on
+  entity_id: light.furnace_room

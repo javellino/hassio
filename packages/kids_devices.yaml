@@ -1,0 +1,50 @@
+#group:
+#  kids_device_custom_timer:
+##    name: Custom Disable timer
+##    entities:
+#      - input_datetime.kids_devices_start
+#      - input_datetime.kids_devices_end
+#      - input_boolean.kids_device_timer_disable
+
+#input_datetime:
+#  kids_devices_start:
+#    has_time: true
+#    has_date: false
+#    name: Start time     
+#  kids_devices_end:
+#    has_time: true
+#    has_date: false
+#    name: End time
+
+input_boolean:
+  kids_device_timer_disable:
+    name: Enable
+
+  
+
+#automation:
+#  - alias: 'disable kids devices at time'
+#    initial_state: on
+#    trigger:
+#      platform: template
+#      value_template: "{{ states('sensor.time') == (states.input_datetime.kids_devices_start.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#    condition:
+#      condition: state
+#      entity_id: input_boolean.kids_device_timer_disable
+#      state: 'on'
+#    action:
+#      - service: switch.turn_on
+#        entity_id: switch.abby_chromebook_disable, switch.becca_chromebook_disable, switch.abby_iphone_disable, switch.becca_iphone_disable, switch.becca_roku_disable, switch.abby_roku_disable
+
+#  - alias: 'enable kids devices at time'
+#    initial_state: on
+#    trigger:
+#      platform: template
+#      value_template: "{{ states('sensor.time') == (states.input_datetime.kids_devices_end.attributes.timestamp | int | timestamp_custom('%H:%M', False)) }}"
+#    condition:
+#      condition: state
+#      entity_id: input_boolean.kids_device_timer_disable
+#      state: 'on'
+#    action:
+#      - service: switch.turn_off
+#        entity_id: switch.abby_chromebook_disable, switch.becca_chromebook_disable, switch.abby_iphone_disable, switch.becca_iphone_disable, switch.becca_roku_disable, switch.abby_roku_disable

@@ -1,0 +1,16 @@
+ip_bans.yaml
+
+.storage
+.cloud
+.google.token
+
+*
+!*.yaml
+!.gitignore
+!packages/
+!custom_components/
+!automation/
+!scripts/
+secrets.yaml
+known_devices.yaml
+zones.yaml

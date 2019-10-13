@@ -1,0 +1,35 @@
+alias: notify joe house open
+initial_state: 'on'
+trigger:
+  - platform: state
+    entity_id: sensor.joe_location
+    from: 'home'
+    to: 'not_home'
+condition:
+  condition: or
+  conditions:
+    - condition: state  
+      entity_id: switch.garage_door_99
+      state: 'on'
+    - condition: state
+      entity_id: lock.front_door_lock_4
+      state: 'unlocked'
+    - condition: state
+      entity_id: binary_sensor.front_door_sensor
+      state: 'on'
+action:
+  service: notify.ios_joesiphone7
+  data_template:
+    message: >
+      {% if is_state('states.switch.garage_door_99.state', 'on') %}
+          The Garage Door is Open!
+      {% endif %}
+      {% if is_state('lock.front_door_lock_4', 'unlocked') %}
+          The Front Door is Unlocked!
+      {% endif %}
+      {% if is_state('binary_sensor.front_door_sensor', 'on') %}
+          The Front Door is ajar!
+      {% endif %}
+    data: 
+      push:
+        category: "lockup" 

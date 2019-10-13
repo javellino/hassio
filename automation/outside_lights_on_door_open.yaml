@@ -1,0 +1,31 @@
+alias: 'turn on front lights if door opens'
+initial_state: 'on'
+trigger:
+  - platform: state
+    entity_id: binary_sensor.front_door_sensor
+    to: 'on'
+  - platform: state
+    entity_id: switch.garage_door_99
+    to: 'on'
+  - platform: state
+    entity_id: binary_sensor.ring_front_door_motion
+    to: 'on'
+condition:
+  condition: and
+  conditions:
+    - condition: state
+      entity_id: sun.sun
+      state: below_horizon
+    - condition: state
+      entity_id: light.front_porch_lights_63
+      state: 'off'
+action:
+  service: script.turn_on
+  entity_id: script.outside_on_delay_off
+
+
+#  - service: light.turn_on
+#    entity_id: group.outside_lights
+#  - delay: '00:05:00'
+#  - service: light.turn_off
+#    entity_id: group.outside_lights

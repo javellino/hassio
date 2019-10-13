@@ -1,0 +1,26 @@
+alias: 'turn on outside lights if off when come home'
+initial_state: 'on'
+trigger:
+  platform: state
+  entity_id: device_tracker.jensphone, sensor.abby_location, sensor.joe_location, sensor.becca_location
+  from: 'not_home'
+  to: 'home'
+condition:
+  condition: and 
+  conditions:
+    - condition: state
+      entity_id: sun.sun
+      state: below_horizon
+    - condition: state
+      entity_id: light.front_porch_lights_63
+      state: 'off'
+  
+action:
+   service: script.turn_on
+   entity_id: script.outside_on_delay_off
+
+#  - service: homeassistant.turn_on
+#    entity_id: group.outside_lights
+#  - delay: 00:10:00
+#  - service: homeassistant.turn_off
+#    entity_id: group.outside_lights

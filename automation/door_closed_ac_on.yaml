@@ -1,0 +1,31 @@
+alias: 'door now closed turn ac back on'
+initial_state: 'on'
+trigger:
+  - platform: state
+    entity_id: binary_sensor.front_door_sensor
+    to: 'off'
+  - platform: state
+    entity_id: binary_sensor.back_door_slider_sensor
+    to: 'off'
+condition:
+  condition: and
+  conditions:
+    - condition: state
+      entity_id: climate.kitchen_kitchen
+      state: 'off'
+    - condition: state
+      entity_id: binary_sensor.front_door_sensor
+      state: 'off'
+    - condition: state
+      entity_id: binary_sensor.back_door_slider_sensor
+      state: 'off'
+action:
+  - service: climate.set_operation_mode
+    data_template:
+      entity_id: climate.kitchen_kitchen
+      operation_mode: " {{ states('input_select.nest_kitchen_state') }} "
+  - service: notify.ios_joesiphone7
+    data_template:
+      message: "operation mode set to {{ states('input_select.nest_kitchen_state') }}. "  
+
+

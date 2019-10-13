@@ -1,0 +1,23 @@
+alias: basement motion triggers heat
+initial_state: 'on'
+trigger:
+  platform: state
+  entity_id: binary_sensor.basement_motion_1_216
+  to: 'off'
+  for:
+    minutes: 5
+condition:
+ # condition: and
+ # conditions:
+  condition: state
+  entity_id: climate.basement_basement
+  state: heat
+#    - condition: template
+#      value_template: "{{ states.climate.basement.attributes.current_temperature | int < 65 }}"  
+action:
+  - service: climate.set_temperature
+    data:
+      entity_id: climate.basement_basement
+      temperature: 60
+      
+

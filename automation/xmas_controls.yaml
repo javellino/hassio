@@ -1,0 +1,11 @@
+alias: toggle xmas control visibility when xmas mode on or off
+initial_state: 'on'
+trigger:
+  platform: state
+  entity_id: input_boolean.xmas_mode
+action:
+  - service: group.set_visibility
+    entity_id: group.xmas_switches
+    data_template:
+      visible: "{% if is_state('input_boolean.xmas_mode', 'on') %}true{% else %}false{% endif %}"
+

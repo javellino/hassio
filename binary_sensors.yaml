@@ -1,0 +1,46 @@
+- platform: template
+  sensors:
+    garage_position:
+      friendly_name: Garage Door
+      value_template: "{{ is_state('switch.garage_door_99','on')}}"
+      device_class: opening
+
+#- platform: command_line
+#  name: openvpn
+#  command: ssh pi@raspberrypi.local 'sudo ifconfig  | grep  -q -e tun0 ; echo $? '
+#  payload_on: 0
+#  payload_off: 1
+#  value_template: "{% if value.state == '0' %} true {% else %} false {% endif %}"
+#  device_class: connectivity
+
+#- platform: command_line
+#  name: transmission status
+#  command: ssh pi@raspberrypi.local 'systemctl is-active  transmission-daemon' 
+#  payload_on: "active"
+#  payload_off: "inactive"
+#  device_class: connectivity
+
+- platform: workday
+  country: US
+  
+
+- platform: ring
+  monitored_conditions:
+    - ding
+    - motion
+
+
+- platform: rpi_gpio
+  pull_mode: up
+  ports:
+    5: basement_slider_sensor
+    12: back_door_slider_sensor
+    13: front_door_sensor
+    6: garage_door_door_sensor
+    16: front_hall_motion_raw
+
+- platform: ping
+  host: 10.9.209.11
+  name: "Gonzo Online"
+
+

@@ -1,0 +1,22 @@
+alias: lock up house
+initial_state: 'on'
+trigger:
+  platform: event
+  event_type: ios.notification_action_fired
+  event_data:
+    actionName: YESLOCKUP
+action:
+  - service: script.lock_up_house 
+  #wait 30 seconds or until everything is locked up to send notification
+  - wait_template: "{% if is_state('lock.front_door_lock_4', 'locked') and is_state( 'binary_sensor.front_door_sensor', 'off') and is_state('switch.garage_door_99','off') %} true {% else %} false {%endif %}"
+    timeout: "00:00:30"
+    continue_on_timeout: true
+  - service: notify.ios_joesiphone7
+    data_template:
+      message: >
+        {% if is_state('lock.front_door_lock_4', 'locked')  and is_state('binary_sensor.front_door_sensor', 'off') and is_state('switch.garage_door_99','off') %}
+            All locked up
+        {% else %}
+            Something isn't right
+        {% endif%}
+

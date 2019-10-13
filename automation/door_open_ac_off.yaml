@@ -1,0 +1,44 @@
+alias: 'front door open 5 mins turn off ac'
+initial_state: 'on'
+trigger:
+  - platform: state
+    entity_id: binary_sensor.back_door_slider_sensor
+    to: 'on'
+    for: 
+      minutes: 5
+
+  - platform: state
+    entity_id: binary_sensor.front_door_sensor
+    to: 'on'
+    for:
+      minutes: 5
+
+action:
+  - service: input_select.select_option
+    data_template:
+      entity_id: input_select.nest_kitchen_state
+      option: >
+        {% set previous = states.input_select.nest_kitchen_state.state %}
+        {% if 'off' in states.climate.kitchen_kitchen.state %}
+           {{previous}}
+        {% else %}
+            {{states('climate.kitchen_kitchen') }}
+        {% endif %}
+        
+#  >
+#          {% if is_state('binary_sensor.front_door_sensor','on')  and  is_state('binary_sensor.back_door_slider_sensor'.'on') %}
+#             {{- states.input_select.nest_kitchen_state.state -}}
+#          {% else %}
+#             {{- states('climate.kitchen_kitchenchen') -}}
+               
+
+  #   " {{ states('climate.kitchen_kitchenchen') }} "
+  - service: notify.ios_joesiphone7
+    data:
+      message: "door open triggered"
+
+#" {{ states.climate.kitchen_kitchenchen.attributes.operation_mode }} "
+  - service: climate.set_operation_mode
+    data:
+      entity_id: climate.kitchen_kitchen
+      operation_mode: "off"

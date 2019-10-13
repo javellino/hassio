@@ -1,0 +1,27 @@
+alias: 'start work in office'
+initial_state: 'on'
+trigger:
+  platform: time
+  at: "06:00:00"
+condition:
+  condition: and  
+  conditions: 
+    - condition: state
+      entity_id: input_boolean.vacation_mode
+      state: 'off'
+    - condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: 'on'
+    - condition: time
+      after: '05:29:00'
+      weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+action:
+  - service: homeassistant.turn_on
+    entity_id: light.office
+    data: 
+      brightness: "255"

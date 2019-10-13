@@ -1,0 +1,6 @@
+alias: sleep mode 
+sequence:
+  - service: light.turn_off
+    entity_id: light.jens_lamp_118, light.joes_lamp_119, light.mbr_lights_109
+  - service: switch.turn_on
+    entity_id: switch.mbr_fan_108

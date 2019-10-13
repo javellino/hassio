@@ -1,0 +1,183 @@
+sensor.pws_feelslike_f:
+  friendly_name: 'Feels like:'
+sensor.pws_temp_f:
+  friendly_name: 'Outside Temp:'
+sensor.pws_wind_mph:
+  friendly_name: 'Wind Speed:'
+  icon: mdi:weather-windy
+device_tracker.Joe_joesiphone6s:
+  icon: mdi:cellphone-iphone
+  friendly_name: Joe
+device_tracker.Abby_abbysiphone:
+  icon: mdi:cellphone-iphone
+sensor.abby_location:
+  icon: mdi:cellphone-iphone
+sensor.16_shanondale_ct:
+  friendly_name: USPS
+sensor.joe_location:
+  icon: mdi:cellphone-iphone
+sensor.becca_location:
+  icon: mdi:cellphone-iphone
+light.jens_lamp_118:
+  icon: mdi:lamp
+light.joes_lamp_119:
+  icon: mdi:lamp
+switch.mbr_fan_108:
+  icon: mdi:fan
+input_slider.mbr_lamp_jen:
+  icon: mdi:lamp
+input_slider.mbr_lamp_joe:
+  icon: mdi:lamp
+input_slider.mbr_group_lamps:
+  icon: mdi:lamp
+light.joe_family_room_lamp:
+  icon: mdi:lamp
+light.jen_family_room_lamp:
+  icon: mdi:lamp
+  friendly_name: Jens Light
+switch.family_room_fan_213:
+  icon: mdi:fan
+  friendly_name: Fan
+switch.garage_door_99:
+  icon: mdi:garage
+light.upstairs_hall_lamp_130:
+  icon: mdi:lamp
+sensor.temperature_sensor_125:
+  friendly_name: Upstairs Temperature
+  icon: mdi:thermometer
+light.desk_light_2:
+  icon: mdi:lamp
+light.office_post_light:
+  icon: mdi:lightbulb-on
+sensor.temperature_sensor_1_181:
+  friendly_name: Office Temperature
+  icon: mdi:thermometer
+sensor.office_batt_level:
+  icon: mdi:battery-charging
+sensor.upstairs_batt_level:
+  icon: mdi:battery-charging
+sensor.joes_iphone:
+  icon: mdi:cellphone-iphone
+sensor.abbys_iphone:
+  icon: mdi:cellphone-iphone
+sensor.front_batt_level:
+  icon: mdi:lock
+sensor.home_to_work:
+  friendly_name: Home to Work commute
+  icon: mdi:car
+sensor.work_to_home:
+  friendly_name: Work to Home commute
+  icon: mdi:car
+sensor.home_to_vre_lot:
+  friendly_name: Home to VRE
+  icon: mdi:car
+sensor.home_to_gymnastics:
+  friendly_name: Home to Gymnastics
+  icon: mdi:car
+sensor.wii:
+  icon: mdi:wii
+sensor.mbr_nest:
+  icon: mdi:nest-thermostat
+sensor.kitchen_nest:
+  icon: mdi:nest-thermostat
+sensor.basement_nest:
+  icon: mdi:nest-thermostat
+sensor.chromecast:
+  icon: mdi:google-chrome
+sensor.speedtest_ping:
+  icon: mdi:access-point
+sensor.speedtest_upload:
+  icon: mdi:arrow-up-bold
+sensor.speedtest_download:
+  icon: mdi:arrow-down-bold
+input_boolean.xmas_mode:
+  icon: mdi:pine-tree
+input_boolean.vacation_mode:
+  icon: mdi:beach
+binary_sensor.front_door_sensor_197:
+  sensor_class: opening
+climate.basement:
+  icon: mdi:thermostat
+climate.kitchen:
+  icon: mdi:thermostat
+climate.master_bedroom:
+  icon: mdi:thermostat
+script.mbr_sleep_mode:
+  icon: mdi:sleep
+script.mbr_nightlight_mode:
+  icon: mdi:sleep-off
+script.mbr_awake_in_bed:
+  icon: mdi:lightbulb-on
+sensor.dark_sky_summary:
+  friendly_name: Forecast
+sensor.dark_sky_daily_summary:
+  friendly_name: Currently
+sensor.dark_sky_daily_high_temperature:
+  friendly_name: High Temp
+sensor.dark_sky_daily_low_temperature:
+  friendly_name: Low Temp
+binary_sensor.upstairs_motion_124:
+  device_class: motion
+binary_sensor.office_motion_161:
+  device_class: motion
+binary_sensor.garage_door_door_sensor:
+  device_class: opening
+  friendly_name: Garage Entry Door
+binary_sensor.back_door_slider_sensor:
+  device_class: opening
+  friendly_name: Back Deck Slider
+binary_sensor.basement_slider_sensor:
+  device_class: opening
+  friendly_name: Basement Slider Door
+binary_sensor.front_door_sensor:
+  device_class: opening
+  friendly_name: Front Door
+media_player.apple_tv:
+  icon: mdi:apple
+light.fireplace_lights_220:
+  icon: mdi:ceiling-light
+binary_sensor.basement_motion_1_216:
+  device_class: motion
+  friendly_name: Basement Motion
+switch.wemo_switch_bravo:
+  friendly_name: Jen's Blanket
+  icon: mdi:hotel
+script.spotify_music:
+  friendly_name: Spotify Player
+  icon: mdi:play
+switch.abby_iphone_disable:
+  assumed_state: false
+switch.becca_iphone_disable:
+  assumed_state: false
+script.mpd_music:
+  can_cancel: 'false'
+switch.becca_roku_disable:
+  assumed_state: false
+switch.becca_chromebook_disable:
+  assumed_state: false
+switch.wemo_switch_charlie:
+  friendly_name: Fan
+  icon: mdi:fan
+switch.abby_chromebook_disable:
+  assumed_state: false
+switch.tplink_plug:
+  friendly_name: End table lamp
+  icon: mdi:lamp
+binary_sensor.mbr_window_sensor_197:
+  device_class: window
+switch.bedfan:
+  friendly_name: Bedfan
+  icon: mdi:hotel
+binary_sensor.dafang_motion_sensor:
+  friendly_name: Basement motion
+sensor.to_alexandria:
+  icon: mdi:train
+switch.pihole:
+  icon: mdi:wall
+switch.beccalamp:
+  friendly_name: BeccaLamp
+  icon: mdi:lamp
+sensor.joes_bg_value:
+  icon: mdi:chart-line-variant
+switch.desk_fan:
+  icon: mdi:fan

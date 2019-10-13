@@ -1,0 +1,10 @@
+alias: 'send message if gonzo is offline'
+initial_state: 'on'
+trigger:
+  platform: state
+  entity_id: binary_sensor.gonzo_online
+  to: "off"
+action:
+  service: notify.pb
+  data:
+    message: "Gonzo is not connected. Please check."

@@ -1,0 +1,348 @@
+#- platform: pi_hole
+#  host: 10.9.209.182:4865
+#  name: pihole
+#  monitored_conditions:
+#    - ads_blocked_today
+#    - ads_percentage_today
+#    - domains_being_blocked
+  
+#- platform: pi_hole
+#  host: 10.9.209.11:8017
+#  name: pihole-gonzo
+#  monitored_conditions:
+#    - ads_blocked_today
+#    - ads_percentage_today
+#    - domains_being_blocked
+
+- platform: systemmonitor
+  resources:
+    - type: disk_use_percent
+      arg: /home
+    - type: memory_free
+    - type: processor_use
+
+- platform: nzbget
+  host: 10.9.209.11
+  port: 6788
+  username: !secret nzbget_username
+  password: !secret nzbget_password
+  scan_interval: 60
+  monitored_variables:
+    - download_rate
+#    - uptime
+
+- platform: template
+  sensors:
+    ring_motion:
+      friendly_name: Front Door Motion
+      value_template: '{{ states.input_boolean.ring_motion.state }}'
+    abby_location:
+      friendly_name: Abby's Location
+      value_template: "{% if states.device_tracker.abbys_iphone_2.state == 'home'  %} {{states.device_tracker.abbys_iphone_2.state }} {% else %}  {{ states.device_tracker.abby_abbysiphone_2.state }} {% endif %}" 
+    joe_location:
+      friendly_name: Joe's Location
+      value_template: "{%  if states.device_tracker.joes_iphone_2.state == 'home' %} {{states.device_tracker.joes_iphone_2.state }} {% else %}  {{ states.device_tracker.joesiphone7.state }} {% endif %}" 
+    joe_iphone_battery:
+      friendly_name: Joe's Battery
+      value_template: '{{ states.device_tracker.joes_iphone_2.attributes.battery|int }}'
+      device_class: battery
+      unit_of_measurement: "%"
+    abby_iphone_battery:
+      friendly_name: Abby's Battery
+      value_template: '{{ states.device_tracker.abby_abbysiphone_2.attributes.battery|int }}'
+      unit_of_measurement: "%"
+    becca_iphone_battery:
+      friendly_name: Becca's Battery
+      value_template: '{{ states.device_tracker.becca_becca_iphone_2.attributes.battery|int }}'
+      unit_of_measurement: "%"
+    becca_location:
+      friendly_name: Becca's Location
+      value_template: "{% if states.device_tracker.beccas_ipod.state == 'home' %} {{states.device_tracker.beccas_ipod.state }} {% else %}  {{ states.device_tracker.becca_becca_iphone_2.state }} {% endif %}  " 
+
+    waqi_fredericksburg:
+      friendly_name: Air Quality
+      value_template: >
+         {%if states.sensor.waqi_widewater_elem_school_widewater_fredericksburg_usa.state| int  < 50 %} Good
+         {% elif states.sensor.waqi_widewater_elem_school_widewater_fredericksburg_usa.state| int  < 100 %} Moderate
+         {% elif states.sensor.waqi_widewater_elem_school_widewater_fredericksburg_usa.state| int  < 150 %} Unhealthy for Senstive Groups
+         {% elif states.sensor.waqi_widewater_elem_school_widewater_fredericksburg_usa.state| int  < 200 %} Unhealthy
+         {% elif states.sensor.waqi_widewater_elem_school_widewater_fredericksburg_usa.state| int  < 250 %} Very Unhealthy 
+         {% elif states.sensor.waqi_widewater_elem_school_widewater_fredericksburg_usa.state| int  < 300 %} Very Unhealthy
+         {% else %} Dude get the fuck outta here! 
+         {% endif %}
+      icon_template: "{{states.sensor.waqi_widewater_elem_school_widewater_fredericksburg_usa.attributes.icon }}"
+    allergy_index_forecasted_average_trend:
+      friendly_name: "Allergy Index: Forecasted Average"
+      value_template: "{{ states.sensor.allergy_index_forecasted_average.attributes.trend}}" 
+      icon_template: "{{ states.sensor.allergy_index_forecasted_average.attributes.icon}}"
+    allergy_index_today_trend:
+      friendly_name: "Allergy Index: Today"
+      value_template: "{{states.sensor.allergy_index_today.attributes.rating }}"
+      icon_template: "{{states.sensor.allergy_index_today.attributes.icon}}"
+    allergy_index_tomorrow_trend:
+      friendly_name: "Allergy Index: Tomorrow"
+      value_template: "{{states.sensor.allergy_index_tomorrow.attributes.rating}}"
+      icon_template: "{{states.sensor.allergy_index_tomorrow.attributes.icon}}"   
+
+
+- platform: mqtt
+  state_topic: Vera/Events/FrontDoorLock
+  name: "Last Front Door code"
+  value_template: >
+       {% set list1=value_json.sl_UserCode.split('"')  %}
+       {{ list1[3] }} 
+
+- platform: mqtt
+  state_topic: Vera/Events/FrontDoorLock
+  name: "Last Front Door timestamp"
+  value_template: "{{ value_json.Time }}"
+
+
+- platform: sonarr
+  api_key: !secret sonarr_api_key
+  host: 10.9.209.11
+  port: 8989
+  monitored_conditions:
+    - upcoming
+  days: 3
+  scan_interval: 600
+
+- platform: radarr
+  api_key: !secret radarr_api_key
+  host: 10.9.209.11
+  port: 7878
+  monitored_conditions:
+    - upcoming
+    - status
+  scan_interval: 600
+    
+
+- platform: waze_travel_time
+  name: Home to Work
+  origin: !secret home_address
+  destination: !secret work_address
+  region: 'US'
+
+- platform: waze_travel_time
+  name: joe to gymnastics
+  origin:  device_tracker.joe_joesiphone6s
+  destination: !secret gymnastics_address
+  region: 'US'
+
+- platform: waze_travel_time
+  name: Home to VRE lot
+  origin: !secret home_address
+  destination: !secret train_station_address
+  region: 'US'
+
+- platform: waze_travel_time
+  name: Work to Home
+  origin: !secret work_address
+  destination: !secret home_address
+  region: 'US'
+
+- platform: waze_travel_time
+  name: Home to Gymnastics
+  origin: !secret home_address
+  destination: !secret gymnastics_address
+  region: 'US'
+
+- platform: template
+  sensors:
+    #Family room hub current activity
+    remote_activity:
+      friendly_name: 'Family Room Activity:'
+      value_template: '{{ states.remote.family_room.attributes.current_activity }}'
+    #Basement hub current acivity
+    basement_remote_activity:
+      friendly_name: 'Basement Activity:'
+      value_template: '{{ states.remote.harmony_hub.attributes.current_activity }}'
+
+    #Front door battery levels
+    front_batt_level:
+      friendly_name: 'Front Door Lock'
+      value_template: '{{ states.lock.front_door_lock_4.attributes.battery_level }}'
+      unit_of_measurement: '%'
+    window_batt_level:
+      friendly_name: 'Window Sensor'
+      value_template: ' {{ states.binary_sensor.mbr_window_sensor_197.attributes.battery_level }} '    
+      unit_of_measurement: '%'
+
+    #motion sensors battery level
+    office_batt_level:
+      friendly_name: 'Office Motion PIR'
+      value_template: '{{ states.binary_sensor.office_motion_161.attributes.battery_level }}'
+      unit_of_measurement: '%'
+    upstairs_batt_level:
+      friendly_name: 'Upstairs Hall PIR'
+      value_template: '{{ states.binary_sensor.upstairs_motion_124.attributes.battery_level }}'
+      unit_of_measurement: '%'
+    
+
+
+- platform: waqi
+  token: !secret waqi_api_key
+  locations:
+    - fredericksburg
+
+#- platform: google_geocode
+#  name: abby geocode
+#  origin:  device_tracker.abby_abbysiphone
+#  api_key:
+  
+#- platform: google_geocode
+#  name: becca geocode
+#  origin: device_tracker.becca_beccasiphone
+#  api_key: 
+
+#### ******Rpi status ******
+
+#- platform: command_line
+#  name: raspberrypi disk space
+#  command: ssh pi@raspberrypi '/bin/sh /home/pi/disk_status.sh'
+#  unit_of_measurement: "%"
+
+#- platform: command_line
+#  name: raspberrypi cpu
+#  command: ssh pi@raspberrypi '/bin/sh /home/pi/cpu_status.sh'
+#  unit_of_measurement: "%"  
+  
+### ****** hassbian status ********
+
+#- platform: command_line
+#  name: CPU
+#  command: vmstat 1 2 | tail -1 | awk '{print int($13+$14)}'
+#  unit_of_measurement: "%"
+
+#- platform: command_line
+#  name: Disk Space used
+#  command: df -l --total  / | tail -1 | awk '{ print int($5) }'
+#  unit_of_measurement: "%"
+
+
+### ******Gonzo satus *****
+
+#- platform: command_line
+#  name: gonzo CPU
+#  command: ssh joe@10.9.209.11 '/bin/sh /home/joe/cpu_status.sh'
+#  unit_of_measurement: "%"
+
+#- platform: command_line
+#  name: gonzo disk space
+#  command: ssh joe@10.9.209.11 '/bin/sh /home/joe/disk_status.sh'
+
+### ******* Gonzo data storage status ******  
+#- platform: command_line
+#  name: data space
+#  command: ssh joe@10.9.209.11 '/bin/sh /home/joe/data_status.sh'
+#  unit_of_measurement: "%"
+  
+
+
+
+
+#- platform: ups
+#  name: 'UPS'
+#  username: !secret ups_username
+#  password: !secret ups_password
+
+
+#ring doorbell
+- platform: ring
+  monitored_conditions:
+    - battery
+    - last_activity
+    - last_ding
+    - last_motion
+    - volume
+
+
+#- platform: crimereports
+#  name: neighborhood_crime
+#  radius: 1000
+
+- platform: time_date
+  display_options:
+    - 'time'
+    - 'date'
+
+#- platform: uber
+#  server_token: !secret uber_token
+
+- platform: season
+  type: astronomical
+
+
+#- platform: fail2ban
+#  jails:
+#    - ssh
+#    - ha
+#  scan_interval: 60
+#  file_path: /var/log/fail2ban.log
+
+
+#- platform: pollen
+#  zip_code: !secret zip_code
+#  monitored_conditions:
+#    - allergy_average_forecasted
+##    - allergy_average_historical
+#    - allergy_index_today
+#    - allergy_index_tomorrow
+#    - allergy_index_yesterday
+#    - disease_average_forecasted
+
+#custom tautulli sensor
+#- platform: tautulli
+#  host: !secret tautulli_url
+#  ssl: true
+#  verify_ssl: false
+#  token: !secret tautulli_token
+#  scan_interval: 45
+#  monitored_conditions:
+#    - stream_count
+#    - stream_count_transcode
+#    - stream_count_direct_play
+#    - stream_count_direct_stream
+#    - total_bandwidth
+
+
+
+#- platform: rest
+#  resource: !secret joes_heroku_url
+#  name: joes current BG
+#  value_template: >
+#        {% set temp=value.split("\t") %}
+#        {{ temp[2] }}
+
+- platform: rest
+  resource: http://gonzo.local:5002/pwrstat
+  name: battery backup state
+  value_template: '{{ value_json.state }}'
+
+- platform: rest
+  resource: !secret joes_heroku_url_json
+  name: Joes BG value
+  unit_of_measurement: "mg/dL"
+  value_template: ' {{value_json[0].sgv }} '
+  
+- platform: rest
+  resource: !secret joes_heroku_url_json
+  name: Joes BG direction
+  value_template: ' {{value_json[0].trend }} '
+
+
+##- platform: gtfs_realtime
+#  trip_update_url: http://www.vre.org/gtfs-realtime/TripUpdateFeed
+#  vehicle_position_url: http://www.vre.org/gtfs-realtime/VehiclePositionFeed
+#  departures:
+#    - name: to Alexandria
+##      route: "4"
+#      stopid: "00000000000000000000000000000004"
+      
+      
+#- platform: unifi
+#  name: unifi_sensor
+#  region: default
+#  username: !secret unifi_host
+#  password: !secret unifi_password
+#  url: https://unifi.javellin.duckdns.org:443

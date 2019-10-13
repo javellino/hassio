@@ -1,0 +1,13 @@
+alias: "turn off basement camera night mode"
+initial_state: "on"
+trigger:
+  - platform: state
+    entity_id: group.basement_lights
+    to: 'on'
+  - platform: sun
+    event: sunrise
+action:
+  service: switch.turn_off
+  entity_id: switch.dafang_night_mode
+  
+  

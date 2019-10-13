@@ -1,0 +1,25 @@
+alias: "turn on basement camera night mode"
+initial_state: "on"
+trigger:
+  - platform: state
+    entity_id: group.basement_lights
+    to: 'off'
+  - platform: sun
+    event: sunset
+condition:
+  condition: and
+  conditions:
+    - condition: state
+      entity_id: group.basement_lights
+      state: 'off'
+    - condition: or
+      conditions:
+        - condition: sun
+          after: sunset 
+        - condition: sun
+          before: sunrise
+action:
+  service: switch.turn_on
+  entity_id: switch.dafang_night_mode
+  
+  

@@ -1,0 +1,29 @@
+alias: 'upstairs window now closed turn upstairs ac back to a respectable temp'
+initial_state: 'on'
+trigger:
+  - platform: state
+    entity_id: binary_sensor.mbr_window_sensor_197
+    to: 'off'
+condition:
+    - condition: state
+      entity_id: input_boolean.mbr_window_triggered
+      state: 'on'
+action:
+  - service: climate.set_temperature
+    data_template:
+      entity_id: climate.master_bedroom_master_bedroom
+      temperature: >
+            {% if is_state('states.climate.master_bedroom_master_bedroom.attributes.operation_mode', 'heat') %}
+                   {{ 60 | int }}    # set to 60 degrees if in heat mode
+            {% else %}
+                   {{ 78 | int }}    # set the temperature to 78 if not in heat mode
+            {% endif %}
+  - service: input_boolean.turn_off
+    data:
+      entity_id: input_boolean.mbr_window_triggered
+                    
+  - service: notify.pb
+    data_template:
+      message: "Master Bedroom window closed. "  
+
+

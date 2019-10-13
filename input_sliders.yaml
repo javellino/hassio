@@ -1,0 +1,26 @@
+mbr_lamp_jen:
+  name: Jens lamp
+  min: 0
+  max: 255
+  step: 1
+#  initial: {% if is_state(light.jens_lamp, 'on') %} {{ light.jens_lamp.brightness }} {% else %} 0  {% endif %} 
+
+mbr_lamp_joe:
+  name: Joes lamp
+  min: 0
+  max: 255
+  step: 1
+
+mbr_group_lamps:
+  name: both lamps
+  min: 0
+  max: 255
+  step: 1
+
+
+#spotify_volume:
+#  name: Volume
+#  icon: mdi:volume-high
+#  min: 0
+#  max: 1
+#  step: 0.05

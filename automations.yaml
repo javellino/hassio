@@ -1,0 +1,12 @@
+- action:
+  - data:
+      message: arriving at work
+    service: notify.pb
+  alias: arriving at work
+  condition: []
+  id: '1506105611998'
+  trigger:
+  - entity_id: device_tracker.joe_joesiphone6s
+    event: enter
+    platform: zone
+    zone: zone.work

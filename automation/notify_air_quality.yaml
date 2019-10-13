@@ -1,0 +1,10 @@
+alias: 'Notify air quality change'
+initial_state: 'on'
+trigger:
+  platform: state
+  entity_id: sensor.waqi_fredericksburg
+action:
+  - service: notify.pb
+    data_template:
+      message: "Air Quality changed to {{ states.sensor.waqi_fredericksburg.state }}."
+

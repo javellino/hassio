@@ -1,0 +1,154 @@
+alias: 'dominos'
+sequence:
+  - service: light.turn_on
+    entity_id: light.living_room_lamp
+    data:
+      color_name: red 
+  - delay:  00:00:01
+  - service: light.turn_on
+    entity_id: light.living_room_lamp
+    data:
+      color_name: blue
+  - service: light.turn_on
+    entity_id: light.living_room_lamp
+    data:
+      color_name: red
+  - delay:  00:00:01
+  - service: light.turn_on
+    entity_id: light.living_room_lamp
+    data:
+      color_name: blue
+  - delay:  00:00:01  
+  - service: light.turn_on
+    entity_id: light.living_room_lamp
+    data:
+      color_name: red
+  - delay:  00:00:01
+  - service: light.turn_on
+    entity_id: light.living_room_lamp
+    data:
+      color_name: blue
+  - delay:  00:00:05
+  - service: light.turn_off
+    entity_id: light.living_room_lamp
+
+alias: goodnight
+sequence:
+  - service: light.turn_off
+    entity_id: light.family_room
+  - service: light.turn_off
+    entity_id: light.office
+
+alias: Lock up house
+sequence:
+  - service: lock.lock
+    entity_id: lock.front_door_lock_4
+  - service: switch.turn_off
+    entity_id: switch.garage_door_99
+
+#for future use
+#  - service: 
+#    entity_id: 
+alias: 'in bed but awake'
+sequence:
+  - service: light.turn_on
+    entity_id: light.mbr_lights_109
+  - service: switch.turn_on
+    entity_id: switch.mbr_fan_108
+  - service: light.turn_off
+    entity_id: group.mbr_both_lamps
+
+
+alias: pre-sleep mode
+sequence:
+  - service: light.turn_on
+    entity_id: light.jens_lamp_118, light.joes_lamp_119
+    data:
+      brightness: 255
+  - service: light.turn_off
+    entity_id: light.mbr_lights_109
+  - service: switch.turn_on
+    entity_id: switch.mbr_fan_108
+
+alias: sleep mode 
+sequence:
+  - service: light.turn_off
+    entity_id: light.jens_lamp_118, light.joes_lamp_119, light.mbr_lights_109
+  - service: switch.turn_on
+    entity_id: switch.mbr_fan_108
+
+alias: 'turn on office lights and set timer'
+sequence:
+  - service: script.turn_off
+    entity_id: script.office_timer_off
+  - service: light.turn_on
+    entity_id: light.aoffice
+  - service: script.turn_on
+    entity_id: script.office_timer_off
+
+alias: 'wait 5 mins and turn off lights'
+sequence: 
+  - delay: '00:05:00'
+  - service: light.turn_off
+    entity_id: light.aoffice
+
+alias: 'outside lights on for ten mins then off'
+sequence:
+  - service: homeassistant.turn_on
+    entity_id: group.outside_lights
+  - delay: 00:10:00
+  - service: homeassistant.turn_off
+    entity_id: group.outside_lights
+
+alias: 'Refresh Owntracks'
+sequence:
+  - service: mqtt.publish
+    data:
+      topic: "owntracks/Joe/joesiphone6s/cmd"
+      payload_template: '{"_type":"cmd","action":"reportLocation"}'
+  - service: mqtt.publish
+    data:
+      topic: "owntracks/Abby/abbysiphone/cmd"
+      payload_template: '{"_type":"cmd","action":"reportLocation"}'
+
+alias: 'delay 30s then reset boolean'
+sequence:
+  - delay:
+      seconds: 30
+  - service: homeassistant.turn_off
+    data:
+      entity_id: input_boolean.ring_motion
+
+alias: 'turn on timed lamp and set timer'
+sequence: 
+  - service: script.turn_off
+    data:
+      entity_id: script.timer_off
+  - service: light.turn_on
+    data_template:
+      entity_id: light.upstairs_hall_lamp_130
+      brightness: >-
+        {% set current_hour = now().strftime("%H") | int %}
+        {%- if current_hour <= 6 %} 64
+        {% elif current_hour < 20 %} 255
+        {% else %} 128
+        {% endif %}
+  - service: script.turn_on
+    data:
+      entity_id: script.timer_off
+
+
+alias: 'turn off lamp after 5 minutes'
+sequence:
+  - delay: 00:05:00
+  - service: light.turn_off
+    data:
+      entity_id: light.upstairs_hall_lamp_130
+
+alias: Turn off Family room TV
+sequence:
+  service: remote.turn_on
+  data:
+    entity_id: remote.family_room
+    activity: -1
+

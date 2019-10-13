@@ -1,0 +1,20 @@
+alias: 'christmas lights on when xmas_mode active at sunset'
+initial_state: 'on'
+trigger:
+  platform: sun
+  event: sunset
+#  offset: '-01:00:00'
+condition:
+  condition: state
+  entity_id: input_boolean.xmas_mode
+  state: 'on'
+action:
+  service: switch.turn_on
+  entity_id: group.xmas_switches
+
+#  - service: light.turn_on
+#    entity_id:
+#      - light.front_porch_lights_63
+#      - light.driveway_lights_65
+#  - service_template: " {% if is_state('input_boolean.xmas_mode', 'on') or is_state('states.switch.outside_xmas_lights_116.state', 'on') %} light.turn_on {% else %} light.turn_off {% endif %}"
+#    entity_id: switch.outside_xmas_lights_116

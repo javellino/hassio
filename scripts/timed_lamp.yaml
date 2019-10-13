@@ -1,0 +1,19 @@
+alias: 'turn on timed lamp and set timer'
+sequence: 
+  - service: script.turn_off
+    data:
+      entity_id: script.timer_off
+  - service: light.turn_on
+    data_template:
+      entity_id: light.upstairs_hall_lamp_130
+      brightness: >-
+        {% set current_hour = now().strftime("%H") | int %}
+        {%- if current_hour <= 6 %} 64
+        {% elif current_hour < 20 %} 255
+        {% else %} 128
+        {% endif %}
+  - service: script.turn_on
+    data:
+      entity_id: script.timer_off
+
+

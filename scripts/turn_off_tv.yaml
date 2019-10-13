@@ -1,0 +1,7 @@
+alias: Turn off Family room TV
+sequence:
+  service: remote.turn_on
+  data:
+    entity_id: remote.family_room
+    activity: -1
+

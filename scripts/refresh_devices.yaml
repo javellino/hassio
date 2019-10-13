@@ -1,0 +1,10 @@
+alias: 'Refresh Owntracks'
+sequence:
+  - service: mqtt.publish
+    data:
+      topic: "owntracks/Joe/joesiphone6s/cmd"
+      payload_template: '{"_type":"cmd","action":"reportLocation"}'
+  - service: mqtt.publish
+    data:
+      topic: "owntracks/Abby/abbysiphone/cmd"
+      payload_template: '{"_type":"cmd","action":"reportLocation"}'

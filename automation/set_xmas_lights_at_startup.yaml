@@ -1,0 +1,15 @@
+alias: set visibility of xmas lights correct at startup
+initial_state: 'on'
+trigger:
+  platform: homeassistant
+  event: start
+condition:
+  condition: state
+  entity_id: input_boolean.xmas_mode
+  state: "off"
+action:
+  - service: input_boolean.turn_on
+    entity_id: input_boolean.xmas_mode
+  - delay: 00:00:02
+  - service: input_boolean.turn_off
+    entity_id: input_boolean.xmas_mode

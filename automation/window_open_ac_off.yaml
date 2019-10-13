@@ -1,0 +1,47 @@
+alias: 'mbr window open 5 mins adjust upstairs ac'
+initial_state: 'on'
+trigger:
+
+  - platform: state
+    entity_id: binary_sensor.window_sensor_197
+    to: 'on'
+    for:
+      minutes: 5
+
+action:
+#  - service: input_select.select_option
+#    data_template:
+#      entity_id: input_select.nest_kitchen_state
+#      option: >
+#        {% if 'off' in states.climate.mbr.state %}
+#           {{ cool }}
+#        {% else %}
+#            {{states('climate.kitchen_kitchenchen') }}
+#        {% endif %}
+        
+#  >
+#          {% if is_state('binary_sensor.front_door_sensor','on')  and  is_state('binary_sensor.back_door_slider_sensor'.'on') %}
+#             {{- states.input_select.nest_kitchen_state.state -}}
+#          {% else %}
+#             {{- states('climate.kitchen_kitchenchen') -}}
+               
+
+  #   " {{ states('climate.kitchen_kitchenchen') }} "
+  - service: notify.pb
+    data:
+      message: "window open triggered"
+
+  - service: input_boolean.turn_on
+    data: 
+      entity_id: input_boolean.mbr_window_triggered
+
+#" {{ states.climate.kitchen_kitchenchen.attributes.operation_mode }} "
+  - service: climate.set_temperature
+    data_template:
+      entity_id: climate.master_bedroom_master_bedroom
+      temperature: >
+             {% if is_state ('states.climate.master_bedroom_master_bedroom.attributes.operation_mode', 'cool') or is_state('states.climate.master_bedroom_master_bedroom.attributes.operation_mode','auto') %}
+                 {{ 75 | int }}  # prevent from getting too hot in ac mode
+             {% else %}
+                 {{ 60 | int }}  # if on heat mode prevent from getting too cold 
+             {% endif %}

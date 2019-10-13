@@ -1,0 +1,28 @@
+alias: goodnight
+sequence:
+  - service: homeassistant.turn_off
+    entity_id: light.office
+  - service: homeassistant.turn_off
+    entity_id: group.basement_lights
+  - service: homeassistant.turn_off
+    entity_id: group.dining_room
+  - service: light.turn_off
+    entity_id: light.table_light_229
+  - service: remote.turn_on
+    entity_id: remote.family_room
+    activity: -1
+  - service: light.turn_off
+    entity_id: light.joe_family_room_lamp,  switch.family_room_fan_213,  light.fireplace_lights_220, switch.tplink_plug
+  - service: light.turn_off
+    entity_id: group.kitchen_lights
+  - service: tts.google_say
+    data:
+      entity_id: media_player.kitchen_speaker
+      message: "don't forget to lock up Joe's car!"
+  - delay: 00:00:15      
+  - service: tts.google_say
+    data:
+      entity_id: media_player.office_speaker
+      message: "Did you forget to lock the car?"
+    
+

@@ -1,0 +1,12 @@
+alias: "Notify if a sensor battery is low"
+initial_state: 'on'
+trigger:
+  platform: numeric_state
+  entity_id: sensor.front_batt_level, sensor.front_sensor_batt_level, sensor.office_batt_level, sensor.upstairs_batt_level, sensor.ring_front_door_battery
+  below: 25
+action:
+  service: notify.pb
+  data_template:
+    message: " {{ trigger.to_state.name }} battery level at {{ trigger.to_state.state }}."
+
+

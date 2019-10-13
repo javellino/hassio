@@ -1,0 +1,8 @@
+alias: 'turn on office lights and set timer'
+sequence:
+  - service: script.turn_off
+    entity_id: script.office_timer_off
+  - service: light.turn_on
+    entity_id: light.aoffice
+  - service: script.turn_on
+    entity_id: script.office_timer_off

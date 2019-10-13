@@ -1,0 +1,7 @@
+alias: 'outside lights on for ten mins then off'
+sequence:
+  - service: homeassistant.turn_on
+    entity_id: group.outside_lights
+  - delay: 00:10:00
+  - service: homeassistant.turn_off
+    entity_id: group.outside_lights

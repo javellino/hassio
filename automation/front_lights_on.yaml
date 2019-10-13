@@ -1,0 +1,11 @@
+alias: 'turn front lights on at sunset'
+initial_state: 'on'
+trigger:
+  platform: sun
+  event: sunset
+action:
+  - service: light.turn_on
+    entity_id: group.outside_lights
+  - service: script.turn_off
+    entity_id: script.outside_on_delay_off
+

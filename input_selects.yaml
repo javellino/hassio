@@ -1,0 +1,35 @@
+#garage_door:
+#  name: Garage Door
+#  options:
+#    - closed
+#    - open
+#  icon: mdi:garage
+
+#front_door_lock:
+#  name: Front Door Lock
+#  options:
+#    - closed
+#    - open
+#  icon: mdi:lock
+
+family_room_select:
+  name: Family Room
+  options:
+    - 'Power Off'
+    - 'Watch Cable'
+    - 'Play Wii U'
+    - 'Play DVD'
+    - 'Plex'
+    - 'Netflix'
+    - 'Amazon'
+  icon: mdi:television
+
+nest_kitchen_state:
+  options:
+    - 'off'
+    - 'heat'
+    - 'cool'
+    - 'auto'
+    - 'eco'
+  initial: heat
+

@@ -1,0 +1,17 @@
+alias: 'turn off office lights end of day'
+initial_state: 'on'
+trigger:
+  platform: time
+  at: '17:00:00'
+condition:
+  condition: time
+  after: '16:59:00'
+  weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+action:
+  service: light.turn_off
+  entity_id: light.office

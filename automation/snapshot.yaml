@@ -1,0 +1,14 @@
+alias: "Create Weekly Backup" # Sunday at 11PM
+initial_state: 'on'
+trigger:
+  platform: time
+  at: '11:00:00'
+condition:  
+  condition: time
+  weekday:
+    - sun
+    - wed
+action:
+  service: hassio.snapshot_full
+  data_template:
+    name: Hassio ({{now().strftime('%d.%m.%y')}})

@@ -1,0 +1,78 @@
+
+- cal_id: 66rv3dpc7ukg6r3mlrf9gdoqas@group.calendar.google.com
+  entities:
+  - device_id: royals
+    ignore_availability: true
+    name: Royals
+    track: true
+
+- cal_id: 5harrk9p9ndr06gq61qj33k2ck@group.calendar.google.com
+  entities:
+  - device_id: joes_work_calendar
+    ignore_availability: true
+    name: Joe's Work Calendar
+    track: true
+    search: "Joe to work"
+
+- cal_id: 4m0pno4hth1ia5ev7qd1f69ld0@group.calendar.google.com
+  entities:
+  - device_id: becca
+    ignore_availability: true
+    name: Becca
+    track: true
+
+- cal_id: 4bmfp1nal64ev223dsno16afd4@group.calendar.google.com
+  entities:
+  - device_id: stafford_county_public_school_calendar
+    ignore_availability: true
+    name: Stafford County Public School Calendar
+    track: true
+
+- cal_id: p6a14vmh13m7me8gtpi9e5o4k4@group.calendar.google.com
+  entities:
+  - device_id: abby
+    ignore_availability: true
+    name: Abby
+    track: true
+
+- cal_id: joseph.e.avellino@gmail.com
+  entities:
+  - device_id: family_calendar
+    ignore_availability: true
+    name: Family Calendar
+    track: true
+
+- cal_id: '#contacts@group.v.calendar.google.com'
+  entities:
+  - device_id: contacts
+    ignore_availability: true
+    name: Contacts
+    track: true
+
+- cal_id: usa__en@holiday.calendar.google.com
+  entities:
+  - device_id: holidays_in_united_states
+    ignore_availability: true
+    name: Holidays in United States
+    track: true
+
+- cal_id: p#weather@group.v.calendar.google.com
+  entities:
+  - device_id: weather_mentone_vic_3194
+    ignore_availability: true
+    name: 'Weather: Mentone, VIC, 3194'
+    track: true
+
+- cal_id: addressbook#contacts@group.v.calendar.google.com
+  entities:
+  - device_id: contacts
+    ignore_availability: true
+    name: Contacts
+    track: true
+
+- cal_id: staffordschools.net_rrkbmublnpdrnkpeet0gs3b5nc@group.calendar.google.com
+  entities:
+  - device_id: agw_x_y_calendar_2019_20
+    ignore_availability: true
+    name: AGW X/Y Calendar (2019-20)
+    track: true

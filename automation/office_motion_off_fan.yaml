@@ -1,0 +1,11 @@
+alias: 'turn off fan if noones in there'
+initial_state: 'on'
+trigger:
+  platform: state
+  entity_id: binary_sensor.office_motion_161
+  to: 'off'
+action:
+  service: switch.turn_off
+  entity_id: switch.wemo_switch_charlie
+
+

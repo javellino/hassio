@@ -1,0 +1,17 @@
+alias: 'Joe left work, send driving time'
+initial_state: 'on'
+trigger:
+  platform: zone
+  entity_id: device_tracker.joe_joesiphone6s
+  zone: zone.work
+  event: leave
+condition:
+  condition: state
+  entity_id: calendar.joe_to_work
+  state: 'on'
+action:
+  service: notify.ios_joesiphone7
+  data_template:
+    message: "Work to home: {{ states.sensor.work_to_home.state }} min"
+
+

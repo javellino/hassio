@@ -1,0 +1,24 @@
+alias: 'set nest home when we arrive'
+initial_state: 'on'
+trigger:
+  #when garage door opens, network detects someone home, or front door opens
+  - platform: state
+    entity_id: group.presence
+    to: 'home'
+  - platform: state
+    entity_id: binary_sensor.front_door_sensor
+    to: 'on'
+  - platform: state
+    entity_id: switch.garage_door_99
+    to: 'on'
+condition:
+  #only fire when Nest is in eco mode for 30 mins
+  condition: state
+  entity_id: climate.basement
+  state: eco
+  for:
+    minutes: 30
+action:
+  service: climate.set_away_mode
+  data:
+    away_mode: off

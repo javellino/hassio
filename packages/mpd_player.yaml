@@ -1,0 +1,93 @@
+homeassistant:
+  customize:
+    script.mpd_play:
+      icon: mdi:play
+
+input_number:
+  mpd_volume:
+    name: Volume
+    icon: mdi:volume-high
+    min: 0
+    max: 1
+    step: 0.05
+
+input_select:
+  mpd_playlist:
+    name: 'Playlist:'
+    options:
+      - Luke Bryan Radio
+      - Brett Eldridge Radio
+      - Zac Brown Radio
+
+    icon: mdi:spotify
+
+  mpd_source:
+    name: 'Source:'
+    options:
+      - Kitchen Speaker
+#      - Joes iPhone 7
+    initial: Kitchen Speaker
+    icon: mdi:speaker-wireless
+
+#customize:
+#  script.spotify_music:
+#    friendly_name: Spotify Player
+#    icon: mdi:play
+  
+
+group:
+  music_whole_house:
+    name: Music
+    entities:
+    - input_select.mpd_playlist
+    - input_select.mpd_source
+    - script.mpd_music
+    - input_number.mpd_volume
+    - media_player.mpd
+
+
+script:
+  mpd_music:
+    alias: "Play selected playlist"
+    sequence:
+      - service: media_player.volume_set
+        data:
+          entity_id: media_player.kitchen_speaker
+          volume_level: '0.22'
+#      -  service: media_player.select_source
+#         data_template: 
+#           entity_id: media_player.spotify
+#           source: >
+#             {% if is_state("input_select.spotify_source", "Kitchen Speaker") %}  "Kitchen Speaker"
+#             {% elif is_state("input_select.spotify_source", "Joes iPhone 7") %}  "Joes iPhone 7"
+#             {% endif%}
+      - service: media_player.play_media
+        data_template:
+          entity_id: media_player.mpd
+          media_content_type: PLAYLIST
+          media_content_id: >
+            {% if is_state("input_select.mpd_playlist", "Luke Bryan Radio") %} spotify:user:lukebryan:playlist:1Nv7H5IhZc25M9qTrv48Kb
+            {% elif is_state("input_select.mpd_playlist", "Brett Eldridge Radio") %} spotify:user:thodge16:playlist:6SSN5UlqtN3d02xp8fE0pk
+            {% elif is_state("input_select.mpd_playlist", "Zac Brown Radio") %} spotify:user:griffis007:playlist:0e5Qdtbmm1eR5T4no1RZKu
+            {% else %} spotify:user:rodaxx30:playlist:1IDH2YNH6z6b7d5lz0ze9b
+            {% endif %}
+      - delay: 00:00:05
+      - service: media_player.play_media
+        data: 
+          entity_id: media_player.kitchen_speaker
+          media_content_type: MUSIC
+          media_content_id: 'http://10.9.209.130:8000/mopidy.mp3'
+           
+
+
+automation:
+  - alias: 'adjust mpd volume based on slider'
+    initial_state: 'on'
+    trigger:
+      platform: state
+      entity_id: input_number.mpd_volume
+    action:
+      service: media_player.volume_set
+      data_template: 
+        entity_id: media_player.mpd
+        volume_level: '{{  states.input_number.mpd_volume.state  }}'

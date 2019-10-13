@@ -1,0 +1,22 @@
+alias: 'upstairs motion for lamp'
+initial_state: 'on'
+trigger:
+  platform: state
+  entity_id: binary_sensor.upstairs_motion_124
+  to: 'on'
+condition:
+  condition: state
+  entity_id: sun.sun
+  state: below_horizon
+action:
+  service: script.turn_on
+  entity_id: script.timed_lamp
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,7 @@
+alias: 'delay 30s then reset boolean'
+sequence:
+  - delay:
+      seconds: 30
+  - service: homeassistant.turn_off
+    data:
+      entity_id: input_boolean.ring_motion
